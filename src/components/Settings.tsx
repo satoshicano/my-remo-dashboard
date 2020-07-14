@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Paper, FormControl, InputLabel, Input, FormHelperText, Link } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import { Cloud } from 'nature-remo';
+import { validateRemoClient, initRemo } from '../lib/Remo';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -16,8 +16,10 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
 }));
-
-export function Settings() {
+type Props = {
+  isAuthorized: boolean
+}
+export function Settings(props: Props) {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -27,16 +29,16 @@ export function Settings() {
   const authorize = useCallback(async () => {
     try {
       setIsError(false);
-      const client = new Cloud(accessToken);
-      await client.getUser();
+      console.log(accessToken);
       localStorage.setItem("remoAccessToken", accessToken);
+      initRemo();
+      await validateRemoClient();
       setIsAuthorized(true);
     } catch (error) {
       setIsError(true);
       setIsAuthorized(false);
     }
   }, [accessToken])
-
 
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();

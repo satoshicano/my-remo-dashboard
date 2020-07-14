@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { Cloud, IAppliance } from 'nature-remo';
 import { useStyles } from "../styles/Appliances";
 import Grid from '@material-ui/core/Grid';
 import Paper from "@material-ui/core/Paper";
@@ -12,27 +11,35 @@ import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { ControllCell } from "./ControllCell";
-
-const accessToken = localStorage.getItem("remoAccessToken");
-const client = new Cloud(accessToken!)
+import { getRemoAppliances } from '../lib/Remo';
+import { IAppliance } from 'nature-remo';
+import { useNavigate } from 'react-router-dom';
 
 function useRemo() {
+  let navigate = useNavigate();
   const [appliances, setAppliances] = useState<IAppliance[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchDevices = async () => {
-      setIsLoading(true);
-      const data = await client.getAppliances();
-      setAppliances(data);
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        const data = await getRemoAppliances();
+        setAppliances(data);
+        setIsLoading(false);
+      } catch (error) {
+        navigate('/settings', { replace: true })
+      }
     }
     fetchDevices();
-  }, []);
+  }, [navigate]);
   return [{ appliances, isLoading }]
 }
 
-export function Appliances() {
+type Props = {
+  isAuthorized: boolean
+}
+export function Appliances(props: Props) {
   const [{ appliances, isLoading }] = useRemo();
   const classes = useStyles();
 
@@ -60,7 +67,7 @@ export function Appliances() {
                   {appliance.nickname}
                 </TableCell>
                 <TableCell>{appliance.type}</TableCell>
-                <TableCell><ControllCell appliance={appliance}/></TableCell>
+                <TableCell><ControllCell appliance={appliance} /></TableCell>
               </TableRow>
             ))}
           </TableBody>

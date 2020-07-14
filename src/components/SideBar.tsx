@@ -8,7 +8,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 
 export function SideBar() {
   return <>
-    <ListItem button component={Link} to="/">
+    <ListItem button component={Link} to="/appliances">
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>

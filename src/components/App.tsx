@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -18,10 +18,14 @@ import { Appliances } from "./Appliances";
 import { SideBar } from './SideBar';
 import { Settings } from './Settings';
 import { useStyles } from '../styles/Appliances';
+import { initRemo, validateRemoClient } from '../lib/Remo';
 // import { ApplianceDetail } from "./ApplianceDetail";
 
 export function App() {
   const classes = useStyles();
+  let navigate = useNavigate();
+
+  const [authorized, setAuthorized] = React.useState(false);
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -29,6 +33,19 @@ export function App() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  useEffect(() => {
+
+    async function validateRemo() {
+      try {
+        initRemo();
+        await validateRemoClient();
+        setAuthorized(true);
+      } catch (error) {
+        navigate('/settings', { replace: true })
+      }
+    }
+    validateRemo();
+  }, [authorized, navigate]);
 
   return (
     <div className={classes.root}>
@@ -69,10 +86,10 @@ export function App() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Routes>
-              <Route path="/" element={<Appliances />} />
-              <Route path="/appliances" element={<Appliances />} />
+              {/* <Route path="/" element={<Appliances isAuthorized />} /> */}
+              <Route path="/appliances" element={<Appliances isAuthorized />} />
               {/* <Route path="appliances/:applianceId" element={<ApplianceDetail />} /> */}
-              <Route path="/settings" element={<Settings />} />
+              <Route path="/settings" element={<Settings isAuthorized />} />
             </Routes>
           </Grid>
         </Container>
