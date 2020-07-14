@@ -7,15 +7,14 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 export function SideBar() {
-  const basename = process.env.PUBLIC_URL;
   return <>
-    <ListItem button component={Link} to={`${basename}/`}>
+    <ListItem button component={Link} to="/">
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItem>
-    <ListItem button component={Link} to={`${basename}/settings`}>
+    <ListItem button component={Link} to="/settings">
       <ListItemIcon>
         <SettingsIcon />
       </ListItemIcon>
