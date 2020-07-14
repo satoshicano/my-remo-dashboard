@@ -8,7 +8,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
-    "history": "^5.0.0",
+    "history": "^5.0.0-beta.9",
     "nature-remo": "1.2.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
