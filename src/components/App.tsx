@@ -151,11 +151,11 @@ export function App() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            <Routes>
-              <Route path="/" element={<Appliances />} />
-              <Route path="appliances" element={<Appliances />} />
-              {/* <Route path="appliances/:applianceId" element={<ApplianceDetail />} /> */}
-              <Route path="settings" element={<Settings />} />
+            <Routes basename={process.env.PUBLIC_URL}>
+                <Route path="/" element={<Appliances />} />
+                <Route path="/appliances" element={<Appliances />} />
+                {/* <Route path="appliances/:applianceId" element={<ApplianceDetail />} /> */}
+                <Route path="/settings" element={<Settings />} />
             </Routes>
           </Grid>
         </Container>
